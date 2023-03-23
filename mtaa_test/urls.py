@@ -5,9 +5,9 @@ from . import views
 
 router = DefaultRouter(trailing_slash=False)
 router.register("rooms?", views.RoomViewSet, basename='rooms')
-router.register("dandcs?", views.RoomViewSet, basename='dandcs')
-router.register("users?", views.RoomViewSet, basename='users')
-router.register("transactions?", views.RoomViewSet, basename='transactions')
-router.register("messages?", views.RoomViewSet, basename='messages') #Dorobiť message
+router.register("dandcs?", views.DebtsClaimsViewSet, basename='dandcs')
+router.register("accounts?", views.AccountViewSet, basename='accounts')
+router.register("transactions?", views.TransactionViewSet, basename='transactions')
+router.register("messages?", views.MessageViewSet, basename='messages') #Dorobiť message
 
 urlpatterns = router.urls

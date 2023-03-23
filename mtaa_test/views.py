@@ -24,7 +24,11 @@ class RoomViewSet(viewsets.ModelViewSet):
 
 
     def list(self, request, *args, **kwargs):
-        room_ids = request.query_params.get('rooms', '').split(',')
+
+        if request.query_params.getlist("rooms"):
+            room_ids = request.query_params.get('rooms', '').split(',')
+        else:
+            room_ids = request.query_params.getlist("rooms")
 
         queryset = self.get_queryset()
         if len(room_ids) > 0:
@@ -74,7 +78,10 @@ class AccountViewSet(viewsets.ModelViewSet):
 
 
     def list(self, request, *args, **kwargs):
-        account_ids = request.query_params.get('accounts', '').split(',')
+        if request.query_params.getlist("accounts"):
+            account_ids = request.query_params.get('accounts', '').split(',')
+        else:
+            account_ids = request.query_params.getlist("accounts")
 
         queryset = self.get_queryset()
         if len(account_ids) > 0:
