@@ -21,6 +21,7 @@ class RoomViewSet(viewsets.ModelViewSet):
     queryset = Room.objects.all()
     serializer_class = RoomSerializer
     permission_classes = []
+    riso je cigan
 
 
     def list(self, request, *args, **kwargs):
