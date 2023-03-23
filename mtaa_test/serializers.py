@@ -13,9 +13,9 @@ class RoomSerializer(serializers.ModelSerializer):
 
 
 class AccountSerializer(serializers.ModelSerializer):
-    friends = FriendsSerializer(read_only=True, many=True)
-    claims = ClaimsSerializer(read_only=True, many=True)
-    transactions = TransactionsSerializer(read_only=True, many=True)
+    friends = serializers.PrimaryKeyRelatedField(queryset=Account.objects.all(), many=True)
+    claims = serializers.PrimaryKeyRelatedField(queryset=Account.objects.all(), many=True)
+    transactions = serializers.PrimaryKeyRelatedField(queryset=Account.objects.all(), many=True)
     class Meta:
         model = Account
         fields = ['id', 'password', 'tag', 'balance', 'name', 'surname', 'email', 'friends', 'claims', 'transactions']
