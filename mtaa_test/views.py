@@ -12,6 +12,8 @@ from mtaa_test.models import Transaction
 from mtaa_test.serializers import TransactionSerializer
 from mtaa_test.models import DebtsClaims
 from mtaa_test.serializers import DebtsClaimsSerializer
+from mtaa_test.models import Message
+from mtaa_test.serializers import MessageSerializer
 
 
 class RoomViewSet(viewsets.ModelViewSet):
