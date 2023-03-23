@@ -32,7 +32,7 @@ class Message(models.Model):
 
 
 class Transaction(models.Model):
-    amount = models.TextField(max_length=255)  # This field type is a guess.
+    amount = models.FloatField()  # This field type is a guess.
     note = models.TextField(blank=True, null=True)
     time = models.DateTimeField(auto_now=True)
     dest_account = models.ForeignKey(Account, models.DO_NOTHING, related_name="transaction")

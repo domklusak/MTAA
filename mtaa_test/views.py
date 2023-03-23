@@ -6,12 +6,16 @@ from django.shortcuts import get_object_or_404
 
 from mtaa_test.models import Room
 from mtaa_test.serializers import RoomSerializer
+from mtaa_test.models import Account
+from mtaa_test.serializers import AccountSerializer
+from mtaa_test.models import Transaction
+from mtaa_test.serializers import TransactionSerializer
+from mtaa_test.models import DebtsClaims
+from mtaa_test.serializers import DebtsClaimsSerializer
 
 
 class RoomViewSet(viewsets.ModelViewSet):
-    """
-    A simple ViewSet for viewing and editing accounts.
-    """
+
     queryset = Room.objects.all()
     serializer_class = RoomSerializer
     permission_classes = []
@@ -60,3 +64,176 @@ class RoomViewSet(viewsets.ModelViewSet):
         return Response(status=status.HTTP_204_NO_CONTENT)
 
 
+class AccountViewSet(viewsets.ModelViewSet):
+
+    queryset = Account.objects.all()
+    serializer_class = AccountSerializer
+    permission_classes = []
+
+
+    def list(self, request, *args, **kwargs):
+        account_ids = request.query_params.get('accounts', '').split(',')
+
+        queryset = self.get_queryset()
+        if len(account_ids) > 0:
+            queryset = queryset.filter(id__in=account_ids)
+        serializer = self.get_serializer(queryset, many=True)
+
+        return Response(serializer.data)
+
+    def create(self, request, *args, **kwargs):
+        serializer = self.get_serializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+    def retrieve(self, request, *args, **kwargs):
+        pk = kwargs.get('pk', None)
+        queryset = self.get_queryset()
+        instance = get_object_or_404(queryset, pk=pk)
+        serializer = self.get_serializer(instance)
+
+        return Response(serializer.data)
+
+    def update(self, request, *args, **kwargs):
+        pk = kwargs.get('pk', None)
+        queryset = self.get_queryset()
+        instance = get_object_or_404(queryset, pk=pk)
+        serializer = self.get_serializer(instance, data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_200_OK)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+    def destroy(self, request, *args, **kwargs):
+        pk = kwargs.get('pk', None)
+        queryset = self.get_queryset()
+        instance = get_object_or_404(queryset, pk=pk)
+        instance.delete()
+        return Response(status=status.HTTP_204_NO_CONTENT)
+
+
+class DebtsClaimsViewSet(viewsets.ModelViewSet):
+
+    queryset = DebtsClaims.objects.all()
+    serializer_class = DebtsClaimsSerializer
+    permission_classes = []
+
+
+    def list(self, request, *args, **kwargs):
+        debts_claims_ids = request.query_params.get('dandcs', '').split(',')
+
+        queryset = self.get_queryset()
+        if len(debts_claims_ids) > 0:
+            queryset = queryset.filter(id__in=debts_claims_ids)
+        serializer = self.get_serializer(queryset, many=True)
+
+        return Response(serializer.data)
+
+    def create(self, request, *args, **kwargs):
+        serializer = self.get_serializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+    def retrieve(self, request, *args, **kwargs):
+        pk = kwargs.get('pk', None)
+        queryset = self.get_queryset()
+        instance = get_object_or_404(queryset, pk=pk)
+        serializer = self.get_serializer(instance)
+
+        return Response(serializer.data)
+
+    def update(self, request, *args, **kwargs):
+        pk = kwargs.get('pk', None)
+        queryset = self.get_queryset()
+        instance = get_object_or_404(queryset, pk=pk)
+        serializer = self.get_serializer(instance, data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_200_OK)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+    def destroy(self, request, *args, **kwargs):
+        pk = kwargs.get('pk', None)
+        queryset = self.get_queryset()
+        instance = get_object_or_404(queryset, pk=pk)
+        instance.delete()
+        return Response(status=status.HTTP_204_NO_CONTENT)
+
+
+class MessageViewSet(viewsets.ModelViewSet):
+
+    queryset = Message.objects.all()
+    serializer_class = MessageSerializer
+    permission_classes = []
+
+
+    def list(self, request, *args, **kwargs):
+        messsage_ids = request.query_params.get('messages', '').split(',')
+
+        queryset = self.get_queryset()
+        if len(message_ids) > 0:
+            queryset = queryset.filter(id__in=messsage_ids)
+        serializer = self.get_serializer(queryset, many=True)
+
+        return Response(serializer.data)
+
+    def create(self, request, *args, **kwargs):
+        serializer = self.get_serializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+    def retrieve(self, request, *args, **kwargs):
+        pk = kwargs.get('pk', None)
+        queryset = self.get_queryset()
+        instance = get_object_or_404(queryset, pk=pk)
+        serializer = self.get_serializer(instance)
+
+        return Response(serializer.data)
+
+    def update(self, request, *args, **kwargs):
+        pk = kwargs.get('pk', None)
+        queryset = self.get_queryset()
+        instance = get_object_or_404(queryset, pk=pk)
+        serializer = self.get_serializer(instance, data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_200_OK)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+    def destroy(self, request, *args, **kwargs):
+        pk = kwargs.get('pk', None)
+        queryset = self.get_queryset()
+        instance = get_object_or_404(queryset, pk=pk)
+        instance.delete()
+        return Response(status=status.HTTP_204_NO_CONTENT)
+
+
+class TransactionViewSet(viewsets.ModelViewSet):
+
+    queryset = Transaction.objects.all()
+    serializer_class = TransactionSerializer
+    permission_classes = []
+
+
+    def list(self, request, *args, **kwargs):
+        transaction_ids = request.query_params.get('transactions', '').split(',')
+
+        queryset = self.get_queryset()
+        if len(transaction_ids) > 0:
+            queryset = queryset.filter(id__in=transaction_ids)
+        serializer = self.get_serializer(queryset, many=True)
+
+        return Response(serializer.data)
+
+    def create(self, request, *args, **kwargs):
+        serializer = self.get_serializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
