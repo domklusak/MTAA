@@ -141,9 +141,12 @@ class DebtsClaimsViewSet(viewsets.ModelViewSet):
         return Response(serializer.data)
 
     def create(self, request, *args, **kwargs):
+        account_id = request.query_params.get("account_id")
+        account = get_object_or_404(Account.objects.all(), pk=account_id)
         serializer = self.get_serializer(data=request.data)
         if serializer.is_valid():
-            serializer.save()
+            claims = serializer.save()
+            account.claims.add(claims)
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
