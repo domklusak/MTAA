@@ -25,10 +25,10 @@ class RoomViewSet(viewsets.ModelViewSet):
 
     def list(self, request, *args, **kwargs):
 
-        if request.query_params.getlist("rooms"):
-            room_ids = request.query_params.get('rooms', '').split(',')
+        if request.query_params.getlist("room_ids"):
+            room_ids = request.query_params.get('room_ids', '').split(',')
         else:
-            room_ids = request.query_params.getlist("rooms")
+            room_ids = request.query_params.getlist("room_ids")
 
         queryset = self.get_queryset()
         if len(room_ids) > 0:
@@ -131,11 +131,15 @@ class DebtsClaimsViewSet(viewsets.ModelViewSet):
 
 
     def list(self, request, *args, **kwargs):
-        debts_claims_ids = request.query_params.get('dandcs', '').split(',')
+
+        if request.query_params.getlist("debt_claim_ids"):
+            debt_claim_ids = request.query_params.get('debt_claim_ids', '').split(',')
+        else:
+            debt_claim_ids = request.query_params.getlist("debt_claim_ids")
 
         queryset = self.get_queryset()
-        if len(debts_claims_ids) > 0:
-            queryset = queryset.filter(id__in=debts_claims_ids)
+        if len(debt_claim_ids) > 0:
+            queryset = queryset.filter(id__in=debt_claim_ids)
         serializer = self.get_serializer(queryset, many=True)
 
         return Response(serializer.data)
@@ -184,7 +188,11 @@ class MessageViewSet(viewsets.ModelViewSet):
 
 
     def list(self, request, *args, **kwargs):
-        messsage_ids = request.query_params.get('messages', '').split(',')
+
+        if request.query_params.getlist("message_ids"):
+            message_ids = request.query_params.get('message_ids', '').split(',')
+        else:
+            message_ids = request.query_params.getlist("message_ids")
 
         queryset = self.get_queryset()
         if len(messsage_ids) > 0:
@@ -235,10 +243,10 @@ class TransactionViewSet(viewsets.ModelViewSet):
 
     def list(self, request, *args, **kwargs):
 
-        if request.query_params.getlist("transactions"):
-            transaction_ids = request.query_params.get('transactions', '').split(',')
+        if request.query_params.getlist("transaction_ids"):
+            transaction_ids = request.query_params.get('transaction_ids', '').split(',')
         else:
-            transaction_ids = request.query_params.getlist("transactions")
+            transaction_ids = request.query_params.getlist("transaction_ids")
 
         queryset = self.get_queryset()
         if len(transaction_ids) > 0:
