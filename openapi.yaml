@@ -1,0 +1,695 @@
+openapi: 3.0.3
+info:
+  description: "Richard Kello, Dominik Klušák"
+  version: "1.0.0"
+  title: "WorryFree"
+# basePath: "/api"
+tags:
+- name: "transaction"
+  description: "Transaction operations"
+- name: "room"
+  description: "Room operations"
+- name: "dandc" 
+  description: "Debts and claims operations"
+- name: "account"
+  description: "Account operations"
+
+paths:
+  '/transactions':
+    get:
+      tags:
+      - transaction
+      summary: "Filter transactions"
+      description: "Account must be logged in to call this endpoint"
+      parameters:
+        - $ref: '#/components/parameters/get_acc_transactions'
+      responses:
+        '200':
+          description: "OK"
+          content:
+            application/json:
+              schema:
+                description: "List of filtered transactions"
+                type: array
+                items:
+                  $ref: '#/components/schemas/Transaction'
+        '400':
+          $ref: '#/components/responses/400'
+        '401':
+          $ref: '#/components/responses/401'
+        '403':
+          $ref: '#/components/responses/403'
+      
+    post:
+      tags:
+      - transaction
+      summary: "Create transaction"
+      description: "Account must be logged in to call this endpoint"
+      parameters: 
+        - in: query
+          name: account_id
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        description: "Required request body"
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Transaction'
+      responses:
+        '201':
+          description: "Created"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Transaction'
+        '400':
+          $ref: '#/components/responses/400'
+        '401':
+          $ref: '#/components/responses/401'
+        '403':
+          $ref: '#/components/responses/401'
+    
+  '/transactions/{transaction_id}':
+    get:
+      tags:
+        - transaction
+      summary: "Show speciffic transaction"
+      description: "Account must be logged in to call this endpoint"
+      parameters:
+        - $ref: '#/components/parameters/get_transaction'
+      responses:
+        '201':
+          description: "OK"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Transaction'
+        '400':
+          $ref: '#/components/responses/400'
+        '401':
+          $ref: '#/components/responses/401'
+        '403':
+          $ref: '#/components/responses/403'
+  
+  '/rooms':
+    get:
+      tags:
+      - room
+      summary: "Display rooms"
+      description: "Account must be logged in to call this endpoint"
+      parameters:
+        - $ref: '#/components/parameters/get_rooms'
+      responses:
+        '200':
+          description: "OK"
+          content:
+            application/json:
+              schema:
+                description: "List of rooms and messages"
+                type: array
+                items:
+                  $ref: '#/components/schemas/Room'
+        '400':
+          $ref: '#/components/responses/400'
+        '401':
+          $ref: '#/components/responses/401'
+        '403':
+          $ref: '#/components/responses/403'
+      
+    post:
+      tags:
+      - room
+      summary: "Create room"
+      description: "Account must be logged in to call this endpoint"
+      requestBody:
+        description: "Required request body"
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Room'
+      responses:
+        '201':
+          description: "Created"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Room'
+        '400':
+          $ref: '#/components/responses/400'
+        '401':
+          $ref: '#/components/responses/401'
+        '403':
+          $ref: '#/components/responses/401'
+          
+  '/rooms/{room_id}':
+    get:
+      tags:
+      - room
+      summary: "Display room information"
+      description: "Account must be logged in to call this endpoint"
+      parameters:
+        - $ref: '#/components/parameters/room_id_path'
+      responses:
+        '200':
+          description: "OK"
+          content:
+            application/json:
+              schema:
+                description: "List of rooms and messages"
+                type: array
+                items:
+                  $ref: '#/components/schemas/Room'
+        '400':
+          $ref: '#/components/responses/400'
+        '401':
+          $ref: '#/components/responses/401'
+        '403':
+          $ref: '#/components/responses/403'
+    delete:
+      tags:
+        - room
+      summary: "Delete room"
+      parameters:
+        - $ref: '#/components/parameters/room_id_path'
+      responses:
+        '204':
+          description: "No Content"
+        '401':
+          $ref: '#/components/responses/401'
+        '403':
+          $ref: '#/components/responses/403'
+        '404':
+          $ref: '#/components/responses/404'
+    
+    put:
+      tags:
+        - room
+      summary: "Update room"
+      parameters:
+        - $ref: '#/components/parameters/room_id_path'
+      requestBody:
+        description: "Required request body"
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Room'
+      responses:
+        '200':
+          description: "OK"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Room'
+        '400':
+          $ref: '#/components/responses/400'
+        '401':
+          $ref: '#/components/responses/401'
+        '403':
+          $ref: '#/components/responses/403'
+        '404':
+          $ref: '#/components/responses/404'
+  
+  '/dandcs':
+    get:
+      tags:
+      - dandc
+      summary: "Display debts and claims"
+      description: "Account must be logged in to call this endpoint"
+      parameters:
+        - $ref: '#/components/parameters/get_debts_and_claims'
+      responses:
+        '200':
+          description: "OK"
+          content:
+            application/json:
+              schema:
+                description: "List of filtered transactions"
+                type: array
+                items:
+                  $ref: '#/components/schemas/Debts_claims'
+        '400':
+          $ref: '#/components/responses/400'
+        '401':
+          $ref: '#/components/responses/401'
+        '403':
+          $ref: '#/components/responses/403'
+          
+    post:
+      tags:
+        - dandc
+      summary: "Create debt or claim"
+      requestBody:
+        description: "Required request body"
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Debts_claims'
+      responses:
+        '201':
+          description: "Created"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Debts_claims'
+        '400':
+          $ref: '#/components/responses/400'
+        '401':
+          $ref: '#/components/responses/401'
+        '403':
+          $ref: '#/components/responses/403'      
+          
+  '/dandcs/{debt_claim_id}':
+    put:
+      tags:
+        - dandc
+      summary: "Update debt or claim"
+      parameters:
+        - $ref: '#/components/parameters/debt_claim_id_path'
+      requestBody:
+        description: "Required request body"
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Debts_claims'
+      responses:
+        '200':
+          description: "OK"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Debts_claims'
+        '400':
+          $ref: '#/components/responses/400'
+        '401':
+          $ref: '#/components/responses/401'
+        '403':
+          $ref: '#/components/responses/403'
+        '404':
+          $ref: '#/components/responses/404'
+    
+    delete:
+      tags:
+        - dandc
+      summary: "Delete debt or claim"
+      parameters:
+        - $ref: '#/components/parameters/debt_claim_id_path'
+      responses:
+        '204':
+          description: "No Content"
+        '401':
+          $ref: '#/components/responses/401'
+        '403':
+          $ref: '#/components/responses/403'
+        '404':
+          $ref: '#/components/responses/404'
+  
+  '/accounts':
+    get:
+      tags:
+        - account
+      summary: "Filter Accounts"
+      parameters:
+        - $ref: '#/components/parameters/account_ids_query'
+        - $ref: '#/components/parameters/account_tags_query'
+      responses:
+        '200':
+          description: "OK"
+          content:
+            application/json:
+              schema:
+                description: "List of filtered Accounts"
+                type: array
+                items:
+                  $ref: '#/components/schemas/Account'
+        '400':
+          $ref: '#/components/responses/400'
+        '401':
+          $ref: '#/components/responses/401'
+        '403':
+          $ref: '#/components/responses/403'
+
+    post:
+      tags:
+        - account
+      summary: "Create Account"
+      requestBody:
+        description: "Required request body"
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Account'
+      responses:
+        '201':
+          description: "Created"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Account'
+        '400':
+          $ref: '#/components/responses/400'
+        '401':
+          $ref: '#/components/responses/401'
+        '403':
+          $ref: '#/components/responses/403'
+
+  '/accounts/{account_id}':
+    get:
+      tags:
+        - account
+      summary: "Get Account"
+      parameters:
+        - $ref: '#/components/parameters/account_id_path'
+      responses:
+        '201':
+          description: "OK"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Account'
+        '401':
+          $ref: '#/components/responses/401'
+        '403':
+          $ref: '#/components/responses/403'
+        '404':
+          $ref: '#/components/responses/404'
+
+    put:
+      tags:
+        - account
+      summary: "Update Account"
+      parameters:
+        - $ref: '#/components/parameters/account_id_path'
+      requestBody:
+        description: "Required request body"
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Account'
+      responses:
+        '200':
+          description: "OK"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Account'
+        '400':
+          $ref: '#/components/responses/400'
+        '401':
+          $ref: '#/components/responses/401'
+        '403':
+          $ref: '#/components/responses/403'
+        '404':
+          $ref: '#/components/responses/404'
+
+    delete:
+      tags:
+        - account
+      summary: "Delete Account"
+      parameters:
+        - $ref: '#/components/parameters/account_id_path'
+      responses:
+        '204':
+          description: "No Content"
+        '401':
+          $ref: '#/components/responses/401'
+        '403':
+          $ref: '#/components/responses/403'
+        '404':
+          $ref: '#/components/responses/404'
+  
+  '/accounts/{account_id}/friendlist':
+    get:
+      tags:
+        - account
+      summary: "Get Accounts friendlist"
+      parameters:
+        - $ref: '#/components/parameters/account_id_path'
+      responses:
+        '200':
+          description: "OK"
+          content:
+            application/json:
+              schema:
+                description: "List of filtered Accounts"
+                type: array
+                items:
+                  $ref: '#/components/schemas/Account'
+        '401':
+          $ref: '#/components/responses/401'
+        '403':
+          $ref: '#/components/responses/403'
+        '404':
+          $ref: '#/components/responses/404'
+          
+  '/messages':
+    get:
+      tags:
+      - message
+      summary: "Filter messages"
+      description: "Account must be logged in to call this endpoint"
+      parameters:
+        - $ref: '#/components/parameters/get_room_messages'
+      responses:
+        '200':
+          description: "OK"
+          content:
+            application/json:
+              schema:
+                description: "List of filtered messages"
+                type: array
+                items:
+                  $ref: '#/components/schemas/Message'
+        '400':
+          $ref: '#/components/responses/400'
+        '401':
+          $ref: '#/components/responses/401'
+        '403':
+          $ref: '#/components/responses/403'
+      
+    post:
+      tags:
+      - message
+      summary: "Create message"
+      description: "Account must be logged in to call this endpoint"
+      requestBody:
+        description: "Required request body"
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Message'
+      responses:
+        '201':
+          description: "Created"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Message'
+        '400':
+          $ref: '#/components/responses/400'
+        '401':
+          $ref: '#/components/responses/401'
+        '403':
+          $ref: '#/components/responses/401'
+
+components:
+  responses:
+    '400':
+      description: "Bad request"
+    '401':
+      description: "Unauthorized (Bad/Missing token)"
+    '403':
+      description: "Forbidden"
+    '404':
+      description: "Resource not found"
+    '409':
+      description: "Conflict or Resource already exists"
+    '500':
+      description: "Internal server error"
+      
+  schemas:
+    Transaction:
+      type: "object"
+      properties:
+        amount:
+          type: number
+          format: float
+        note:
+          type: string
+        send_time:
+          type: string
+        account:
+          type: integer
+          
+    Room:
+      type: object
+      properties:
+        name:
+          type: string
+        create_time:
+          type: string
+        owner:
+          type: integer
+          
+    Message:
+      type: "object"
+      properties:
+        text:
+          type: string
+        send_time:
+          type: string
+        account:
+          type: integer
+        room:
+          type: integer
+          
+    Debts_claims:
+      type: "object"
+      properties:
+        amount:
+          type: number
+          format: float
+        debt_account:
+          type: integer
+
+    Account:
+      type: object
+      properties:
+        password:
+          type: string
+          example: '12345'
+        tag:
+          type: string
+          example: 'usaqrd'
+        balance:
+          type: number
+          format: float
+          example: '20,01'
+        name:
+          type: string
+          example: John
+        surname:
+          type: string
+          example: James
+        email:
+          type: string
+          example: john@email.com
+        friends:
+          type: array
+          items:
+            type: string
+        claims:
+          type: array
+          items:
+            type: string
+        transactions:
+          type: array
+          items:
+            type: string
+          
+  parameters:
+  #Transactions
+    get_acc_transactions:
+      name: "transaction_ids"
+      in: query
+      description: "Get all account transactions"
+      schema:
+        description: "List of all account transactions"
+        type: array
+        items:
+          type: integer
+          
+    get_transaction:
+      name: "transaction_id"
+      in: path
+      description: "Get speciffic transaction"
+      required: true
+      schema:
+        type: integer
+        
+  #Rooms        
+    get_rooms:
+      name: "room_ids"
+      in: query
+      description: "Get all chat rooms"
+      schema:
+        description: "List of all chat rooms"
+        type: array
+        items:
+          type: integer  
+                
+    room_id_path:
+      in: path
+      name: "room_id"
+      schema:
+        type: integer
+      required: true
+      description: "Numeric ID of the room to get"
+      
+  #Accounts          
+    account_ids_query:
+      in: query
+      name: "account_ids"
+      description: "Filter by Account ids"
+      schema:
+        description: "List of Account ids"
+        type: array
+        items:
+          type: integer
+          
+    account_tags_query:
+      in: query
+      name: "account_ids"
+      description: "Filter by Account tags"
+      schema:
+        description: "List of Account tags"
+        type: array
+        items:
+          type: string
+          
+    account_id_path:
+      in: path
+      name: "account_id"
+      schema:
+        type: integer
+      required: true
+      description: "Numeric ID of the Account to get"
+      
+  #Debts and claims
+    get_debts_and_claims:
+      name: "debt_and_claim_ids"
+      in: query
+      description: "Get all debpts and claims of Account"
+      schema:
+        description: "List all Accounts debpts and claims"
+        type: array
+        items:
+          type: integer
+          
+    debt_claim_id_path:
+      in: path
+      name: "debt_claim_id"
+      schema:
+        type: integer
+      required: true
+      description: "Numeric ID of debt or claim to get"
+  
+  #Messages
+    get_room_messages:
+      name: "message_ids"
+      in: query
+      description: "Get all messages  in room"
+      schema:
+        description: "List of all rooms messages"
+        type: array
+        items:
+          type: integer
