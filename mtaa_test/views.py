@@ -78,10 +78,10 @@ class AccountViewSet(viewsets.ModelViewSet):
 
 
     def list(self, request, *args, **kwargs):
-        if request.query_params.getlist("accounts"):
-            account_ids = request.query_params.get('accounts', '').split(',')
+        if request.query_params.getlist("account_ids"):
+            account_ids = request.query_params.get('account_ids', '').split(',')
         else:
-            account_ids = request.query_params.getlist("accounts")
+            account_ids = request.query_params.getlist("account_ids")
 
         queryset = self.get_queryset()
         if len(account_ids) > 0:
@@ -231,7 +231,11 @@ class TransactionViewSet(viewsets.ModelViewSet):
 
 
     def list(self, request, *args, **kwargs):
-        transaction_ids = request.query_params.get('transactions', '').split(',')
+
+        if request.query_params.getlist("transactions"):
+            transaction_ids = request.query_params.get('transactions', '').split(',')
+        else:
+            transaction_ids = request.query_params.getlist("transactions")
 
         queryset = self.get_queryset()
         if len(transaction_ids) > 0:
@@ -240,9 +244,20 @@ class TransactionViewSet(viewsets.ModelViewSet):
 
         return Response(serializer.data)
 
+    def retrieve(self, request, *args, **kwargs):
+        pk = kwargs.get('pk', None)
+        queryset = self.get_queryset()
+        instance = get_object_or_404(queryset, pk=pk)
+        serializer = self.get_serializer(instance)
+
+        return Response(serializer.data)
+
     def create(self, request, *args, **kwargs):
+        account_id = request.query_params.get("account_id")
+        account = get_object_or_404(Account.objects.all(), pk=account_id)
         serializer = self.get_serializer(data=request.data)
         if serializer.is_valid():
-            serializer.save()
+            transaction = serializer.save()
+            account.transactions.add(transaction)
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
