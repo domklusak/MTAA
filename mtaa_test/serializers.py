@@ -4,6 +4,7 @@ from mtaa_test.models import Room
 from mtaa_test.models import Account
 from mtaa_test.models import Transaction
 from mtaa_test.models import DebtsClaims
+from mtaa_test.models import Message
 
 
 class RoomSerializer(serializers.ModelSerializer):
@@ -34,5 +35,5 @@ class DebtsClaimsSerializer(serializers.ModelSerializer):
 
 class MessageSerializer(serializers.ModelSerializer):
     class Meta:
-        model = Transaction
+        model = Message
         fields = ['id', 'text', 'send_time', 'account', 'room']
