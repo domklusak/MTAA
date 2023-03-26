@@ -195,8 +195,8 @@ class MessageViewSet(viewsets.ModelViewSet):
             message_ids = request.query_params.getlist("message_ids")
 
         queryset = self.get_queryset()
-        if len(messsage_ids) > 0:
-            queryset = queryset.filter(id__in=messsage_ids)
+        if len(message_ids) > 0:
+            queryset = queryset.filter(id__in=message_ids)
         serializer = self.get_serializer(queryset, many=True)
 
         return Response(serializer.data)
