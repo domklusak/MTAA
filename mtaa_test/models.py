@@ -11,6 +11,7 @@ class Account(models.Model):
     friends = models.ManyToManyField("self")
     claims = models.ManyToManyField("DebtsClaims")
     transactions = models.ManyToManyField("Transaction")
+    rooms = models.ManyToManyField("Room")
 
 
 class DebtsClaims(models.Model):
