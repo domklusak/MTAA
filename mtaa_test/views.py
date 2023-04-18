@@ -203,9 +203,16 @@ class MessageViewSet(viewsets.ModelViewSet):
         else:
             message_ids = request.query_params.getlist("message_ids")
 
+        room_id = request.query_params.get('room_id', None)
+
+
         queryset = self.get_queryset()
+
         if len(message_ids) > 0:
             queryset = queryset.filter(id__in=message_ids)
+
+        if room_id is not None:
+            queryset = queryset.filter(room_id=room_id)
         serializer = self.get_serializer(queryset, many=True)
 
         return Response(serializer.data)
