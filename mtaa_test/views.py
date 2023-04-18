@@ -80,7 +80,11 @@ class AccountViewSet(viewsets.ModelViewSet):
     queryset = Account.objects.all()
     serializer_class = AccountSerializer
 
-    @permission_classes([IsAuthenticated])
+    def check_permissions(self, request):
+        if self.action and (self.action == 'create'):
+            return True
+        return super().check_permissions(request)
+
     def list(self, request, *args, **kwargs):
         if request.query_params.getlist("account_ids"):
             account_ids = request.query_params.get('account_ids', '').split(',')
@@ -94,7 +98,6 @@ class AccountViewSet(viewsets.ModelViewSet):
 
         return Response(serializer.data)
 
-    @permission_classes([SkipAuth])
     def create(self, request, *args, **kwargs):
         serializer = self.get_serializer(data=request.data)
         if serializer.is_valid():
@@ -102,7 +105,6 @@ class AccountViewSet(viewsets.ModelViewSet):
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
-    @permission_classes([IsAuthenticated])
     def retrieve(self, request, *args, **kwargs):
         pk = kwargs.get('pk', None)
         queryset = self.get_queryset()
@@ -111,7 +113,6 @@ class AccountViewSet(viewsets.ModelViewSet):
 
         return Response(serializer.data)
 
-    @permission_classes([IsAuthenticated])
     def update(self, request, *args, **kwargs):
         pk = kwargs.get('pk', None)
         queryset = self.get_queryset()
@@ -122,7 +123,7 @@ class AccountViewSet(viewsets.ModelViewSet):
             return Response(serializer.data, status=status.HTTP_200_OK)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
-    @permission_classes([IsAuthenticated])
+
     def destroy(self, request, *args, **kwargs):
         pk = kwargs.get('pk', None)
         queryset = self.get_queryset()
