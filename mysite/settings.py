@@ -47,7 +47,7 @@ INSTALLED_APPS = [
 ]
 
 ASGI_APPLICATION = 'mysite.routing.application'
-
+"""
 CHANNEL_LAYERS = {
     "default": {
         "BACKEND": "channels_redis.core.RedisChannelLayer",
@@ -56,7 +56,7 @@ CHANNEL_LAYERS = {
         },
     },
 }
-
+"""
 MIDDLEWARE = [
     'corsheaders.middleware.CorsMiddleware',
     'django.middleware.security.SecurityMiddleware',
