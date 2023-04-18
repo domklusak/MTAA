@@ -2,7 +2,9 @@ from django.http import HttpResponse
 from rest_framework import viewsets, status
 from rest_framework.response import Response
 from django.shortcuts import get_object_or_404
-
+from rest_framework.permissions import IsAuthenticated
+from rest_framework.decorators import permission_classes
+from rest_framework.decorators import action
 
 from mtaa_test.models import Room
 from mtaa_test.serializers import RoomSerializer
@@ -14,17 +16,20 @@ from mtaa_test.models import DebtsClaims
 from mtaa_test.serializers import DebtsClaimsSerializer
 from mtaa_test.models import Message
 from mtaa_test.serializers import MessageSerializer
+from rest_framework import permissions
 
+class SkipAuth(permissions.IsAuthenticated):
+    def has_permission(self, request, view):
+        return True
 
 class RoomViewSet(viewsets.ModelViewSet):
 
     queryset = Room.objects.all()
     serializer_class = RoomSerializer
-    permission_classes = []
+    permission_classes = [IsAuthenticated]
 
 
     def list(self, request, *args, **kwargs):
-
         if request.query_params.getlist("room_ids"):
             room_ids = request.query_params.get('room_ids', '').split(',')
         else:
@@ -74,9 +79,8 @@ class AccountViewSet(viewsets.ModelViewSet):
 
     queryset = Account.objects.all()
     serializer_class = AccountSerializer
-    permission_classes = []
 
-
+    @permission_classes([IsAuthenticated])
     def list(self, request, *args, **kwargs):
         if request.query_params.getlist("account_ids"):
             account_ids = request.query_params.get('account_ids', '').split(',')
@@ -90,6 +94,7 @@ class AccountViewSet(viewsets.ModelViewSet):
 
         return Response(serializer.data)
 
+    @permission_classes([SkipAuth])
     def create(self, request, *args, **kwargs):
         serializer = self.get_serializer(data=request.data)
         if serializer.is_valid():
@@ -97,6 +102,7 @@ class AccountViewSet(viewsets.ModelViewSet):
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
+    @permission_classes([IsAuthenticated])
     def retrieve(self, request, *args, **kwargs):
         pk = kwargs.get('pk', None)
         queryset = self.get_queryset()
@@ -105,6 +111,7 @@ class AccountViewSet(viewsets.ModelViewSet):
 
         return Response(serializer.data)
 
+    @permission_classes([IsAuthenticated])
     def update(self, request, *args, **kwargs):
         pk = kwargs.get('pk', None)
         queryset = self.get_queryset()
@@ -115,6 +122,7 @@ class AccountViewSet(viewsets.ModelViewSet):
             return Response(serializer.data, status=status.HTTP_200_OK)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
+    @permission_classes([IsAuthenticated])
     def destroy(self, request, *args, **kwargs):
         pk = kwargs.get('pk', None)
         queryset = self.get_queryset()
@@ -127,7 +135,7 @@ class DebtsClaimsViewSet(viewsets.ModelViewSet):
 
     queryset = DebtsClaims.objects.all()
     serializer_class = DebtsClaimsSerializer
-    permission_classes = []
+    permission_classes = [IsAuthenticated]
 
 
     def list(self, request, *args, **kwargs):
@@ -184,7 +192,7 @@ class MessageViewSet(viewsets.ModelViewSet):
 
     queryset = Message.objects.all()
     serializer_class = MessageSerializer
-    permission_classes = []
+    permission_classes = [IsAuthenticated]
 
 
     def list(self, request, *args, **kwargs):
@@ -238,7 +246,7 @@ class TransactionViewSet(viewsets.ModelViewSet):
 
     queryset = Transaction.objects.all()
     serializer_class = TransactionSerializer
-    permission_classes = []
+    permission_classes = [IsAuthenticated]
 
 
     def list(self, request, *args, **kwargs):
