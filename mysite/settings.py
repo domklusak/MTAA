@@ -33,6 +33,7 @@ CORS_ALLOW_CREDENTIALS = True
 # Application definition
 
 INSTALLED_APPS = [
+    "daphne",
     'mtaa_test.apps.MtaaTestConfig',
     'django.contrib.admin',
     'django.contrib.auth',
@@ -44,6 +45,17 @@ INSTALLED_APPS = [
     "rest_framework.authtoken",
     'corsheaders'
 ]
+
+ASGI_APPLICATION = 'mysite.routing.application'
+
+CHANNEL_LAYERS = {
+    "default": {
+        "BACKEND": "channels_redis.core.RedisChannelLayer",
+        "CONFIG": {
+            "hosts": [('0.0.0.0', 6379)],
+        },
+    },
+}
 
 MIDDLEWARE = [
     'corsheaders.middleware.CorsMiddleware',
