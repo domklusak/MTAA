@@ -26,4 +26,10 @@ class ChatConsumer(WebsocketConsumer):
         message_instance = Message(text=message_content, account=account_instance, room=room_instance)
         message_instance.save()
 
-        self.send(text_data=json.dumps({"message": text_data_json, }))
+        msg = {
+            "text": message_content,
+            "account": sender_id,
+            "room": room_id
+        }
+
+        self.send(json.dumps(msg))
