@@ -1,10 +1,7 @@
-from django.http import HttpResponse
 from rest_framework import viewsets, status
 from rest_framework.response import Response
 from django.shortcuts import get_object_or_404
 from rest_framework.permissions import IsAuthenticated
-from rest_framework.decorators import permission_classes
-from rest_framework.decorators import action
 
 from mtaa_test.models import Room
 from mtaa_test.serializers import RoomSerializer
@@ -45,7 +42,9 @@ class RoomViewSet(viewsets.ModelViewSet):
     def create(self, request, *args, **kwargs):
         serializer = self.get_serializer(data=request.data)
         if serializer.is_valid():
-            serializer.save()
+            room = serializer.save()
+            acc = Account.objects.get(id=room.owner_id)
+            acc.rooms.add(room)
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
