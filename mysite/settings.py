@@ -43,20 +43,21 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'rest_framework',
     "rest_framework.authtoken",
-    'corsheaders'
+    'corsheaders',
+    'channels'
 ]
 
 ASGI_APPLICATION = 'mysite.routing.application'
-"""
+
 CHANNEL_LAYERS = {
     "default": {
         "BACKEND": "channels_redis.core.RedisChannelLayer",
         "CONFIG": {
-            "hosts": [('0.0.0.0', 6379)],
+            "hosts": [("localhost", 6379)],
         },
     },
 }
-"""
+
 MIDDLEWARE = [
     'corsheaders.middleware.CorsMiddleware',
     'django.middleware.security.SecurityMiddleware',

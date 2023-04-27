@@ -1,7 +1,7 @@
-from django.urls import re_path
+from django.urls import path
 
 from mtaa_test import consumer
 
 websocket_urlpatterns = [
-    re_path(r'ws/room/', consumer.ChatConsumer.as_asgi()),
+    path(r"ws/room/<str:room_id>", consumer.ChatConsumer.as_asgi()),
 ]
