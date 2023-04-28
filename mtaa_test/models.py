@@ -30,6 +30,7 @@ class Room(models.Model):
 
 class Message(models.Model):
     text = models.TextField(max_length=255)
+    image = models.ImageField(upload_to='chat_images/', null=True, blank=True)
     send_time = models.DateTimeField(auto_now=True)
     account = models.ForeignKey(Account, models.DO_NOTHING)
     room = models.ForeignKey(Room, models.DO_NOTHING)

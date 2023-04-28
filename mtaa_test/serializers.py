@@ -37,4 +37,4 @@ class DebtsClaimsSerializer(serializers.ModelSerializer):
 class MessageSerializer(serializers.ModelSerializer):
     class Meta:
         model = Message
-        fields = ['id', 'text', 'send_time', 'account', 'room']
+        fields = ['id', 'text', 'image', 'send_time', 'account', 'room']
