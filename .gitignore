@@ -1,5 +1,4 @@
 .venv
-mysite/env
+media
 mtaa_test/migrations
 
-media
