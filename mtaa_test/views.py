@@ -1,4 +1,5 @@
 from rest_framework import viewsets, status
+from rest_framework.decorators import action
 from rest_framework.response import Response
 from django.shortcuts import get_object_or_404
 from rest_framework.permissions import IsAuthenticated
@@ -112,6 +113,16 @@ class AccountViewSet(viewsets.ModelViewSet):
 
         return Response(serializer.data)
 
+    @action(detail=True, url_path="transactions")
+    def retrieve_transactions(self, request, *args, **kwargs):
+        pk = kwargs.get('pk', None)
+        queryset = self.get_queryset()
+        instance = get_object_or_404(queryset, pk=pk)
+
+        serializer = TransactionSerializer(instance.transactions, many=True)
+
+        return Response(serializer.data)
+
     def update(self, request, *args, **kwargs):
         pk = kwargs.get('pk', None)
         queryset = self.get_queryset()
@@ -121,7 +132,6 @@ class AccountViewSet(viewsets.ModelViewSet):
             serializer.save()
             return Response(serializer.data, status=status.HTTP_200_OK)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-
 
     def destroy(self, request, *args, **kwargs):
         pk = kwargs.get('pk', None)
@@ -264,8 +274,10 @@ class TransactionViewSet(viewsets.ModelViewSet):
             transaction_ids = request.query_params.getlist("transaction_ids")
 
         queryset = self.get_queryset()
+
         if len(transaction_ids) > 0:
             queryset = queryset.filter(id__in=transaction_ids)
+
         serializer = self.get_serializer(queryset, many=True)
 
         return Response(serializer.data)

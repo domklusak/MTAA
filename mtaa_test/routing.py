@@ -1,5 +1,4 @@
 from django.urls import path
-
 from mtaa_test import consumer
 
 websocket_urlpatterns = [

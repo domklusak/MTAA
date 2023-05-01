@@ -36,7 +36,6 @@ class ChatConsumer(WebsocketConsumer):
         account_instance = Account.objects.get(id=sender_id)
         room_instance = Room.objects.get(id=room_id)
         message_instance = None
-        print("ja som typ", message_type)
 
         if message_type == 'chat_message':
             message_instance = Message(text=message_content, account=account_instance, room=room_instance)
