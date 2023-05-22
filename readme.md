@@ -21,8 +21,8 @@ To install and run the project locally, follow these steps:
 4. Configure the database settings in `settings.py`. <br>
 <br>
 5. Make the database migrations:
-   ```shell
-   python manage.py makemigrations
+    ```shell
+   python manage.py makemigrations 
    
 6. Run the database migrations:
     ```shell
