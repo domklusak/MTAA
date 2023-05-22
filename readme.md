@@ -18,8 +18,7 @@ To install and run the project locally, follow these steps:
    ```shell
    pip install -r requirements.txt
 
-4. Configure the database settings in `settings.py`. <br>
-<br>
+4. Configure the database settings in `settings.py`.
 5. Make the database migrations:
     ```shell
    python manage.py makemigrations 
